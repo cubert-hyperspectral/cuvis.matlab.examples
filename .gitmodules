@@ -1,0 +1,3 @@
+[submodule "cuvis.matlab"]
+	path = cuvis.matlab
+	url = https://github.com/cubert-hyperspectral/cuvis.matlab.git
