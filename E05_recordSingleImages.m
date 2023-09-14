@@ -1,18 +1,24 @@
 
 clear variables;
 
-addpath('../lib');
-cuvis_init('C:\\Program Files\\Cuvis\\user\\settings');
+% check if installation is correct
+if size(ls('cuvis.matlab'),1) == 2
+    error('cuvis.matlab submodule not initialized')
+end
 
+% add matlab wrapepr
+addpath('cuvis.matlab');
+cuvis_init();
 
-calib = cuvis_calibration('C:\\Program Files\\Cuvis\\factory');
+calibration = cuvis_calibration('C:\\Program Files\\Cuvis\\factory');
 
 disp('load processing context');
-proc = cuvis_proc_cont(calib);
+processingContext = cuvis_proc_cont(calibration);
 
 disp('load acquisition context');
-acq = cuvis_acq_cont(calib);
-up_path = '../../sample_data/userplugin/cai.xml';
+acquisitionContext = cuvis_acq_cont(calibration);
+up_path = "..\\cuvis_3.20_sample_data\\sample_data\\userplugin\\cai.xml";
+
 
 viewer = cuvis_viewer('userplugin',fileread(up_path));
 
@@ -20,10 +26,12 @@ cube_exporter  = cuvis_exporter_cube('export_dir','export' ,'allow_overwrite',tr
 
 disp('done loading.');
 
+disp(acquisitionContext.get_state());
 %% wait for device online
-
-while strcmp(acq.get_state(),'hardware_state_offline')
+sec = 0;
+while strcmp(acquisitionContext.get_state(),'hardware_state_offline')
     pause(1);
+    sec = sec+1;
     disp('waiting for camera to become online...');
 end
 
@@ -32,11 +40,11 @@ end
 disp('initialize.');
 
 
-cb=acq.set_integration_time(100);
+cb=acquisitionContext.set_integration_time(100);
 cb(0);
-cb=acq.set_operation_mode('Software');
+cb=acquisitionContext.set_operation_mode('Software');
 cb(0);
-proc.set_processing_mode('Cube_Raw');
+processingContext.set_processing_mode('Cube_Raw');
 
 
 %% capture
@@ -48,7 +56,7 @@ disp('start recording');
 for k=1:10
     
     
-    callback = acq.capture();
+    callback = acquisitionContext.capture();
     [isok, mesu] = callback(1000);
     
     if ~isok
@@ -56,7 +64,7 @@ for k=1:10
     else
         %image valid
         tic
-        proc.apply(mesu);
+        processingContext.apply(mesu);
         
         %cube_exporter.apply(mesu);
         view = viewer.apply(mesu);
@@ -74,3 +82,15 @@ for k=1:10
     
     pause(1);
 end
+%%
+clear calibration;
+clear ans;
+clear callback;
+clear processingContext;
+clear acquisitionContext;
+clear cube_exporter;
+clear up_path;
+clear cb;
+clear isok;
+clear k;
+clear viewer;

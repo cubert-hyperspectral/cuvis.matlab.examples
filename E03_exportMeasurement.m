@@ -1,13 +1,21 @@
-
+% initialize
 clear variables;
 
-addpath('../lib');
-cuvis_init('../../sample_data/set1/settings');
+example_measurement_path = '../cuvis_3.20_sample_data/sample_data/set_examples/set0_lab/x20_calib_color.cu3s';
 
+% check if installation is correct
+if size(ls('cuvis.matlab'),1) == 2
+    error('cuvis.matlab submodule not initialized')
+end
 
-mesu = cuvis_measurement('../../sample_data/set1/processed/vegetation_ref.cu3');
+% add matlab wrapepr
+addpath('cuvis.matlab');
+cuvis_init();
 
-up_path = '../../sample_data/userplugin/cai.xml';
+sess = cuvis_session_file(example_measurement_path);
+mesu = sess.get_measurement(1, 'session_item_type_frames'); %get first frame
+
+up_path = '../cuvis_3.20_sample_data/sample_data/userplugin/cai.xml';
 
 
 tiff_exporter_single  = cuvis_exporter_tiff('export_dir','export/single' ,'format','Single');
@@ -26,6 +34,8 @@ view_exporter.apply(mesu);
 
 
 clear mesu;
+clear sess;
+clear up_path;
 clear tiff_exporter_single;
 clear tiff_exporter_multi;
 clear envi_exporter;

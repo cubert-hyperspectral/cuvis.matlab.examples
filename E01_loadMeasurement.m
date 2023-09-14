@@ -1,7 +1,7 @@
 
-%% initialize
+% initialize
 clear variables;
-example_measurement_path = '../cuvis_3.20_sample_data/sample_data/set_examples/set0_lab/x20_calib_color.cu3s'
+example_measurement_path = '../cuvis_3.20_sample_data/sample_data/set_examples/set0_lab/x20_calib_color.cu3s';
 
 
 % check if installation is correct

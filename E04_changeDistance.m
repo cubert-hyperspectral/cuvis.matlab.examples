@@ -1,10 +1,21 @@
-
+% initialize
 clear variables;
+example_measurement_path = '../cuvis_3.20_sample_data/sample_data/set_examples/set0_lab/x20_calib_color.cu3s';
 
-addpath('../lib');
-cuvis_init('../../sample_data/set1/settings');
 
-mesu = cuvis_measurement('../../sample_data/set1/vegetation_000/vegetation_000_000_snapshot.cu3');
+% check if installation is correct
+if size(ls('cuvis.matlab'),1) == 2
+    error('cuvis.matlab submodule not initialized')
+end
+
+% add matlab wrapepr
+addpath('cuvis.matlab');
+cuvis_init();
+
+
+
+sess = cuvis_session_file(example_measurement_path);
+mesu = sess.get_measurement(1, 'session_item_type_frames'); %get first frame
 
 
 if (isfield(mesu.data,'cube'))
@@ -21,9 +32,7 @@ if (isfield(mesu.data,'cube'))
     axis image;
     
 end
-
-calib = cuvis_calibration('../../sample_data/set1/factory');
-proc = cuvis_proc_cont(calib);
+proc = cuvis_proc_cont(sess);
 
 
 %set distance to 1m
@@ -44,3 +53,8 @@ if (isfield(mesu.data,'cube'))
     axis image;
     
 end
+
+clear mesu;
+clear proc;
+clear rgb;
+clear sess;

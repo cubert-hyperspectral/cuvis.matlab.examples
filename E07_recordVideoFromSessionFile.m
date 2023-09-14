@@ -1,16 +1,23 @@
 
 clear variables;
+% check if installation is correct
+if size(ls('cuvis.matlab'),1) == 2
+    error('cuvis.matlab submodule not initialized')
+end
 
-addpath('../lib');
-cuvis_init('C:\\Program Files\\cuvis\\user\\settings');
+% add matlab wrapepr
+addpath('cuvis.matlab');
+cuvis_init();
 
-calib = cuvis_calibration('C:\\Program Files\\cuvis\\factory');
+example_measurement_path = '../cuvis_3.20_sample_data/sample_data/set_examples/set0_lab/x20p_calib_color.cu3s';
+
+session = cuvis_session_file(example_measurement_path);
 
 disp('load processing context');
-proc = cuvis_proc_cont(calib);
+proc = cuvis_proc_cont(session);
 
 disp('load acquisition context');
-acq = cuvis_acq_cont(calib);
+acq = cuvis_acq_cont(session);
 
 cube_exporter  = cuvis_exporter_cube('export_dir','export' ,'allow_overwrite',true,'allow_session_file',true);
 
@@ -20,6 +27,7 @@ disp('done loading.');
 
 while strcmp(acq.get_state(),'hardware_state_offline')
     pause(1);
+    disp('.');
 end
 
 %% init

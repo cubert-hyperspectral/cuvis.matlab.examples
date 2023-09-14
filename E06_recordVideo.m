@@ -1,44 +1,59 @@
-
 clear variables;
 
-addpath('../lib');
-cuvis_init('C:\\Program Files\\cuvis\\user\\settings');
+% check if installation is correct
+if size(ls('cuvis.matlab'),1) == 2
+    error('cuvis.matlab submodule not initialized')
+end
 
-calib = cuvis_calibration('C:\\Program Files\\cuvis\\factory');
+% add matlab wrapepr
+addpath('cuvis.matlab');
+cuvis_init();
+
+calibration = cuvis_calibration('C:\\Program Files\\Cuvis\\factory');
 
 disp('load processing context');
-proc = cuvis_proc_cont(calib);
+processingContext = cuvis_proc_cont(calibration);
 
 disp('load acquisition context');
-acq = cuvis_acq_cont(calib);
+acquisitionContext = cuvis_acq_cont(calibration);
+up_path = "..\\cuvis_3.20_sample_data\\sample_data\\userplugin\\cai.xml";
 
-cube_exporter  = cuvis_exporter_cube('export_dir','export' ,'allow_overwrite',true,'allow_session_file',true);
+
+viewer = cuvis_viewer('userplugin',fileread(up_path));
+cube_exporter  = cuvis_exporter_cube('export_dir','export' ,'allow_overwrite',true);
 
 disp('done loading.');
 
+disp(acquisitionContext.get_state());
+
 %% wait for device online
 
-while strcmp(acq.get_state(),'hardware_state_offline')
+while strcmp(acquisitionContext.get_state(),'hardware_state_offline')
     pause(1);
+    disp('waiting for camera to become online...');
 end
 
 %% init
 
 disp('initialize.');
 
-acq.set_session_info('example_vid',10,10);
+acquisitionContext.set_session_info('example_vid',10,10);
 
-cb=acq.set_operation_mode('Internal');
-cb(0);
-cb=acq.set_integration_time(100);
-cb(0);
-cb=acq.set_fps(5);
-cb(0);
-proc.set_processing_mode('Cube_Raw');
+acquisitionContext.set_operation_mode('Internal');
+acquisitionContext.set_integration_time(100);
+acquisitionContext.set_fps(5);
+% cb=acquisitionContext.set_operation_mode('Internal');
+% cb(0);
+% cb=acquisitionContext.set_integration_time(100);
+% cb(0);
+% %first error  cworker_settings.Value.worker_queue_size = p.Results.worker_queue_size ;
+% cb=acquisitionContext.set_fps(5);
+% cb(0);
+processingContext.set_processing_mode('Cube_Raw');
 
 worker = cuvis_worker();
-worker.set_acq_cont(acq);
-worker.set_proc_cont(proc);
+worker.set_acq_cont(acquisitionContext);
+worker.set_proc_cont( processingContext);
 worker.set_exporter(cube_exporter);
 
 %%
@@ -60,6 +75,7 @@ while  ~KEY_IS_PRESSED
     
     while ~worker.has_next_measurement() &&  ~KEY_IS_PRESSED
         pause(0.01)
+        disp('waiting for camera to become online...');
     end
     
     
@@ -135,7 +151,6 @@ end
 
 %% cleanup
 close(fig);
-
 clear all;
 
 function myKeyPressFcn(hObject, event)
