@@ -15,7 +15,7 @@ cuvis_init();
 sess = cuvis_session_file(example_measurement_path);
 mesu = sess.get_measurement(1, 'session_item_type_frames'); %get first frame
 
-up_path = '../cuvis_3.20_sample_data/sample_data/userplugin/cai.xml';
+up_path = '../cuvis_3.20_sample_data/sample_data/set_examples/userplugin/cai.xml';
 
 
 tiff_exporter_single  = cuvis_exporter_tiff('export_dir','export/single' ,'format','Single');

@@ -17,7 +17,7 @@ processingContext = cuvis_proc_cont(calibration);
 
 disp('load acquisition context');
 acquisitionContext = cuvis_acq_cont(calibration);
-up_path = "..\\cuvis_3.20_sample_data\\sample_data\\userplugin\\cai.xml";
+up_path = '../cuvis_3.20_sample_data/sample_data/set_examples/userplugin/cai.xml';
 
 
 viewer = cuvis_viewer('userplugin',fileread(up_path));

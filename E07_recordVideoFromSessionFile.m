@@ -1,5 +1,7 @@
 
 clear variables;
+autoExp = true;
+
 % check if installation is correct
 if size(ls('cuvis.matlab'),1) == 2
     error('cuvis.matlab submodule not initialized')
@@ -9,7 +11,7 @@ end
 addpath('cuvis.matlab');
 cuvis_init();
 
-example_measurement_path = '../cuvis_3.20_sample_data/sample_data/set_examples/set0_lab/x20p_calib_color.cu3s';
+example_measurement_path = '../cuvis_3.20_sample_data/sample_data/set_examples/set0_lab/x20_calib_color.cu3s';
 
 session = cuvis_session_file(example_measurement_path);
 
@@ -40,8 +42,13 @@ cb=acq.set_operation_mode('Internal');
 cb(0);
 cb=acq.set_integration_time(100);
 cb(0);
-cb=acq.set_fps(5);
+cb=acq.set_fps(0.5);
 cb(0);
+cb=acq.set_auto_exp(autoExp);
+cb(0);
+cb=acq.set_continuous(true);
+cb(0);
+
 proc.set_processing_mode('Cube_Raw');
 
 worker = cuvis_worker();
@@ -51,6 +58,7 @@ worker.set_exporter(cube_exporter);
 
 %%
 disp('start recording');
+
 
 
 
@@ -73,7 +81,7 @@ while  ~KEY_IS_PRESSED
     
     while worker.has_next_measurement() &&  ~KEY_IS_PRESSED
         %drop images in queue
-        [isok, mesu, view] = worker.get_next_mesurement();
+        [isok, mesu, view] = worker.get_next_mesurement(1000);
     end
     
     
@@ -132,14 +140,17 @@ while  ~KEY_IS_PRESSED
                 
                 
                 drawnow;
-                
+                % cube_exporter.apply(mesu);
                 clear mesu;
-                %cube_exporter.apply(mesu);
+               
             end
             
         end
     end
 end
+
+cb=acq.set_continuous(false);
+cb(0);
 
 %% cleanup
 close(fig);

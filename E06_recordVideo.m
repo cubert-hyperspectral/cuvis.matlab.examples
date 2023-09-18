@@ -1,5 +1,8 @@
 clear variables;
 
+autoExp = false;
+
+
 % check if installation is correct
 if size(ls('cuvis.matlab'),1) == 2
     error('cuvis.matlab submodule not initialized')
@@ -16,7 +19,7 @@ processingContext = cuvis_proc_cont(calibration);
 
 disp('load acquisition context');
 acquisitionContext = cuvis_acq_cont(calibration);
-up_path = "..\\cuvis_3.20_sample_data\\sample_data\\userplugin\\cai.xml";
+up_path = '../cuvis_3.20_sample_data/sample_data/set_examples/userplugin/cai.xml';
 
 
 viewer = cuvis_viewer('userplugin',fileread(up_path));
@@ -39,17 +42,17 @@ disp('initialize.');
 
 acquisitionContext.set_session_info('example_vid',10,10);
 
-acquisitionContext.set_operation_mode('Internal');
-acquisitionContext.set_integration_time(100);
-acquisitionContext.set_fps(5);
-% cb=acquisitionContext.set_operation_mode('Internal');
-% cb(0);
-% cb=acquisitionContext.set_integration_time(100);
-% cb(0);
-% %first error  cworker_settings.Value.worker_queue_size = p.Results.worker_queue_size ;
-% cb=acquisitionContext.set_fps(5);
-% cb(0);
+cb=acquisitionContext.set_operation_mode('Internal');
+cb(0);
+cb=acquisitionContext.set_integration_time(100);
+cb(0);
+cb=acquisitionContext.set_fps(0.5);
+cb(0);
 processingContext.set_processing_mode('Cube_Raw');
+cb=acquisitionContext.set_continuous(true);
+cb(0);
+cb=acquisitionContext.set_auto_exp(autoExp);
+cb(0);
 
 worker = cuvis_worker();
 worker.set_acq_cont(acquisitionContext);
@@ -75,13 +78,12 @@ while  ~KEY_IS_PRESSED
     
     while ~worker.has_next_measurement() &&  ~KEY_IS_PRESSED
         pause(0.01)
-        disp('waiting for camera to become online...');
     end
     
     
     while worker.has_next_measurement() &&  ~KEY_IS_PRESSED
         %drop images in queue
-        [isok, mesu, view] = worker.get_next_mesurement();
+        [isok, mesu, view] = worker.get_next_mesurement(1000);
     end
     
     
@@ -141,14 +143,17 @@ while  ~KEY_IS_PRESSED
                 
                 drawnow;
                 
-                clear mesu;
+                
                 %cube_exporter.apply(mesu);
+                clear mesu;
             end
             
         end
     end
 end
 
+cb=acquisitionContext.set_continuous(false);
+cb(0);
 %% cleanup
 close(fig);
 clear all;
