@@ -36,7 +36,7 @@ proc = cuvis_proc_cont(sess);
 
 
 %set distance to 1m
-proc.calc_distance(1000);
+proc.calc_distance(1000); %in mm
 proc.set_processing_mode('Cube_Raw');
 proc.apply(mesu);
 
