@@ -40,7 +40,7 @@ acq.set_session_info('example_vid',10,10);
 
 cb=acq.set_operation_mode('Internal');
 cb(0);
-cb=acq.set_integration_time(100);
+cb=acq.set_integration_time(100); %in ms
 cb(0);
 cb=acq.set_fps(0.5);
 cb(0);
