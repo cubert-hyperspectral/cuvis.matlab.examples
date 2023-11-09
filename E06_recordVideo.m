@@ -44,7 +44,7 @@ acquisitionContext.set_session_info('example_vid',10,10);
 
 cb=acquisitionContext.set_operation_mode('Internal');
 cb(0);
-cb=acquisitionContext.set_integration_time(100);
+cb=acquisitionContext.set_integration_time(100); %in ms
 cb(0);
 cb=acquisitionContext.set_fps(0.5);
 cb(0);
