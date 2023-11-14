@@ -40,7 +40,7 @@ end
 disp('initialize.');
 
 
-cb=acquisitionContext.set_integration_time(100);
+cb=acquisitionContext.set_integration_time(100); %in ms
 cb(0);
 cb=acquisitionContext.set_operation_mode('Software');
 cb(0);
