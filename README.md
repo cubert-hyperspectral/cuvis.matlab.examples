@@ -6,9 +6,9 @@
 
 ## Preparation
 
-To get the exampels running, first  you need to install the Cuvis C SDK (see [here](https://cloud.cubert-gmbh.de/index.php/s/m1WfR66TjcGl96z)), as explained for the MATLAB wrapper [here](https://github.com/cubert-hyperspectral/cuvis.matlab).
+To get the exampels running, first  you need to install the Cuvis C SDK (see [here](https://cloud.cubert-gmbh.de/s/q3YiPZPJe5oXziZ)), as explained for the MATLAB wrapper [here](https://github.com/cubert-hyperspectral/cuvis.matlab).
 
-For running some of the examples, you have to use sample data (provided [here](https://cloud.cubert-gmbh.de/index.php/s/3oECVGWpC1NpNqC)).
+For running some of the examples, you have to use sample data (provided [here](https://cloud.cubert-gmbh.de/s/SrkSRja5FKGS2Tw)).
 
 Make sure that the folder of the example data (cuvis_3.2.1_sample_data) and the folder cuvis.matlab.examples are in the same directory.
 
