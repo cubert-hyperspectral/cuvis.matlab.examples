@@ -4,7 +4,7 @@
 
 ## Preparation
 
-To get the exampels running, first  you need to install the Cuvis C SDK (see [here](https://cloud.cubert-gmbh.de/s/q3YiPZPJe5oXziZ)), as explained for the MATLAB wrapper [here](https://github.com/cubert-hyperspectral/cuvis.matlab).
+To get the exampels running, first  you need to install the Cuvis C SDK (see [here](https://cloud.cubert-gmbh.de/s/qpxkyWkycrmBK9m)), as explained for the MATLAB wrapper [here](https://github.com/cubert-hyperspectral/cuvis.matlab).
 
 For running some of the examples, you have to use sample data (provided [here](https://cloud.cubert-gmbh.de/s/SrkSRja5FKGS2Tw)).
 
