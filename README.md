@@ -1,5 +1,11 @@
 ![image](https://raw.githubusercontent.com/cubert-hyperspectral/cuvis.sdk/main/branding/logo/banner.png)
 
+>**WARNING**\
+>This repository is no longer actively maintained.
+>We no longer offer support or bug fixes for this project.
+>Use at your own discretion.
+>Last updated: 11.06.2025
+
 # cuvis.matlab.examples
 
 ## Preparation
